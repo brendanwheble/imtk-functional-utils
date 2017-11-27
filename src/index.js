@@ -89,6 +89,14 @@ export const checkIfRaw = (test) => {
   };
 };
 
+export const checkIfOrReturnErrorProperty = (test) => {
+  return function (what) {
+    return multicompare(test, what) ?
+      Promise.resolve(what) :
+      Promise.reject(what.error || what);
+  };
+};
+
 export const getProp = accessor => array => array.map(item => item[accessor]);
 
 export const equalsPredicate = (accessor, value, obj) => _get(obj, accessor) === value;
@@ -116,7 +124,7 @@ export const getJson = response => response.json();
 export const postToAPIWithDefaultOptions = postToAPI({ method: 'POST', credentials: 'include' });
 export const getFromAPIWithDefaultOptions = getFromAPI({ method: 'GET', credentials: 'include' });
 export const isJsonStatusOk = checkIf({ success: true }, 'An error occurred');
-export const jsonMustHaveSuccessTrue = checkIfRaw({ success: true });
+export const jsonMustHaveSuccessTrue = checkIfOrReturnErrorProperty({ success: true });
 export const dispatchAction = dispatch => actionCreator => (...args) => {
   dispatch(actionCreator(...args));
 };
