@@ -81,6 +81,14 @@ export const checkIf = (test, errMsg) => {
   };
 };
 
+export const checkIfRaw = (test) => {
+  return function (what) {
+    return multicompare(test, what) ?
+      Promise.resolve(what) :
+      Promise.reject(what);
+  };
+};
+
 export const getProp = accessor => array => array.map(item => item[accessor]);
 
 export const equalsPredicate = (accessor, value, obj) => _get(obj, accessor) === value;
@@ -108,6 +116,7 @@ export const getJson = response => response.json();
 export const postToAPIWithDefaultOptions = postToAPI({ method: 'POST', credentials: 'include' });
 export const getFromAPIWithDefaultOptions = getFromAPI({ method: 'GET', credentials: 'include' });
 export const isJsonStatusOk = checkIf({ success: true }, 'An error occurred');
+export const jsonMustHaveSuccessTrue = checkIfRaw({ success: true });
 export const dispatchAction = dispatch => actionCreator => (...args) => {
   dispatch(actionCreator(...args));
 };
@@ -132,6 +141,31 @@ export const processDefaultAPIRequestWithoutPing = (apiCall, successAction, fail
     getJson,
     isJsonStatusOk,
     get('data')
+  ),
+  successAction,
+  failureAction,
+  done
+);
+
+export const processDefaultAPIRequestReturnData = (apiCall, successAction, failureAction, done) => processAPIRequestChain(
+  pipeP(
+    apiCall,
+    isResponseStatusOk,
+    getJson,
+    jsonMustHaveSuccessTrue,
+    get('data')
+  ),
+  successAction,
+  failureAction,
+  done
+);
+
+export const processDefaultAPIRequestReturnAll = (apiCall, successAction, failureAction, done) => processAPIRequestChain(
+  pipeP(
+    apiCall,
+    isResponseStatusOk,
+    getJson,
+    jsonMustHaveSuccessTrue
   ),
   successAction,
   failureAction,
