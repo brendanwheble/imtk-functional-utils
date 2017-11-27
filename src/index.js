@@ -121,7 +121,11 @@ export const getFromAPI = options => url => () => {
 export const isResponseStatusOk = response => response.ok ? Promise.resolve(response) : Promise.reject({ status: response.status, statusText: response.statusText, toString() { return JSON.stringify(this); } }); //eslint-disable-line
 export const getJson = response => response.json();
 
-export const postToAPIWithDefaultOptions = postToAPI({ method: 'POST', credentials: 'include' });
+export const postToAPIWithDefaultOptions = postToAPI({
+  method: 'POST',
+  credentials: 'include',
+  headers: new Headers({ 'Content-Type': 'application/json' })
+});
 export const getFromAPIWithDefaultOptions = getFromAPI({ method: 'GET', credentials: 'include' });
 export const isJsonStatusOk = checkIf({ success: true }, 'An error occurred');
 export const jsonMustHaveSuccessTrue = checkIfOrReturnErrorProperty({ success: true });
