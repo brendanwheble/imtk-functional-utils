@@ -6,6 +6,7 @@ import _matches from 'lodash/matches';
 import _merge from 'lodash/merge';
 import _omit from 'lodash/omit';
 import _pick from 'lodash/pick';
+import * as ApiUtils from './api';
 
 export const compose = (...fns) => x => fns.reduceRight((y, f) => f(y), x);
 export const pipe = (...fns) => x => fns.reduce((y, f) => f(y), x);
@@ -91,3 +92,5 @@ export const existsPredicate = (accessor, value, obj) => typeof _get(obj, access
 export const filterByKey = accessor => predicate => value => array => array.filter(obj =>
   predicate(accessor, value, obj)
 );
+
+export { ApiUtils };
