@@ -6,7 +6,6 @@ import _matches from 'lodash/matches';
 import _merge from 'lodash/merge';
 import _omit from 'lodash/omit';
 import _pick from 'lodash/pick';
-import * as ApiUtils from './api';
 
 export const compose = (...fns) => x => fns.reduceRight((y, f) => f(y), x);
 export const pipe = (...fns) => x => fns.reduce((y, f) => f(y), x);
@@ -93,4 +92,48 @@ export const filterByKey = accessor => predicate => value => array => array.filt
   predicate(accessor, value, obj)
 );
 
-export { ApiUtils };
+export const postToAPI = options => url => (data) => {
+  const opts = options || {};
+  return fetch(url, { ...opts, body: JSON.stringify(data) });
+};
+
+export const getFromAPI = options => url => () => {
+  const opts = options || {};
+  return fetch(url, { ...opts });
+};
+
+export const isResponseStatusOk = response => response.ok ? Promise.resolve(response) : Promise.reject({ status: response.status, statusText: response.statusText, toString() { return JSON.stringify(this); } }); //eslint-disable-line
+export const getJson = response => response.json();
+
+export const postToAPIWithDefaultOptions = postToAPI({ method: 'POST', credentials: 'include' });
+export const getFromAPIWithDefaultOptions = getFromAPI({ method: 'GET', credentials: 'include' });
+export const isJsonStatusOk = checkIf({ success: true }, 'An error occurred');
+export const dispatchAction = dispatch => actionCreator => (...args) => {
+  dispatch(actionCreator(...args));
+};
+
+export const processAPIRequestChain = (work, successAction, failureAction, done) => (initialData) => {
+  work(Promise.resolve(initialData))
+    .then((value) => {
+      successAction(value);
+    })
+    .catch((err) => {
+      failureAction(err);
+    })
+    .then(() => {
+      done();
+    });
+};
+
+export const processDefaultAPIRequestWithoutPing = (apiCall, successAction, failureAction, done) => processAPIRequestChain(
+  pipeP(
+    apiCall,
+    isResponseStatusOk,
+    getJson,
+    isJsonStatusOk,
+    get('data')
+  ),
+  successAction,
+  failureAction,
+  done
+);
