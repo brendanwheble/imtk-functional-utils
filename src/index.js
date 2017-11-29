@@ -162,7 +162,6 @@ export const processDefaultAPIRequestWithoutPing = (apiCall, successAction, fail
 export const processDefaultAPIRequestReturnData = (apiCall, successAction, failureAction, done) => processAPIRequestChain(
   pipeP(
     apiCall,
-    isResponseStatusOk,
     getJson,
     jsonMustHaveSuccessTrue,
     get('data')
@@ -175,7 +174,6 @@ export const processDefaultAPIRequestReturnData = (apiCall, successAction, failu
 export const processDefaultAPIRequestReturnAll = (apiCall, successAction, failureAction, done) => processAPIRequestChain(
   pipeP(
     apiCall,
-    isResponseStatusOk,
     getJson,
     jsonMustHaveSuccessTrue
   ),
