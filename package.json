@@ -1,6 +1,6 @@
 {
   "name": "imtk-functional-utils",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A collection of functional programming utilities",
   "main": "dist/index.js",
   "scripts": {
