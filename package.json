@@ -4,6 +4,8 @@
   "description": "A collection of functional programming utilities",
   "main": "dist/index.js",
   "scripts": {
+    "build:dist": "babel -d dist src --ignore '**/__tests__/**'",
+    "build:flow": "flow gen-flow-files src --out-dir dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Brendan Wheble",
@@ -13,6 +15,7 @@
     "babel-eslint": "^8.0.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-flow": "^6.23.0",
     "eslint": "^3.11.0",
     "eslint-config-airbnb": "^13.0.0",
     "eslint-plugin-import": "^2.2.0",
@@ -20,6 +23,8 @@
     "eslint-plugin-react": "^6.7.1"
   },
   "dependencies": {
-    "lodash": "^4.17.4"
+    "flow-bin": "^0.60.1",
+    "lodash": "^4.17.4",
+    "redux": "^3.7.2"
   }
 }
