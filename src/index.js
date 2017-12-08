@@ -151,7 +151,7 @@ export const processAPIRequestChain = (work:(arg:mixed)=>Promise<mixed>, success
     });
 };
 
-export const processDefaultAPIRequestWithoutPing = (apiCall:(args:?Object)=>Promise<*>, successAction:Function, failureAction:Function, done:Function) => processAPIRequestChain(
+export const processDefaultAPIRequestWithoutPing = (apiCall:(args:any)=>Promise<*>, successAction:Function, failureAction:Function, done:Function) => processAPIRequestChain(
   pipeP(
     apiCall,
     isResponseStatusOk,
@@ -164,7 +164,7 @@ export const processDefaultAPIRequestWithoutPing = (apiCall:(args:?Object)=>Prom
   done
 );
 
-export const processDefaultAPIRequestReturnData = (apiCall:(args:?Object)=>Promise<*>, successAction:Function, failureAction:Function, done:Function) => processAPIRequestChain(
+export const processDefaultAPIRequestReturnData = (apiCall:(args:any)=>Promise<*>, successAction:Function, failureAction:Function, done:Function) => processAPIRequestChain(
   pipeP(
     apiCall,
     getJson,
@@ -176,7 +176,7 @@ export const processDefaultAPIRequestReturnData = (apiCall:(args:?Object)=>Promi
   done
 );
 
-export const processDefaultAPIRequestReturnAll = (apiCall:(args:?Object)=>Promise<*>, successAction:Function, failureAction:Function, done:Function) => processAPIRequestChain(
+export const processDefaultAPIRequestReturnAll = (apiCall:(args:any)=>Promise<*>, successAction:Function, failureAction:Function, done:Function) => processAPIRequestChain(
   pipeP(
     apiCall,
     getJson,
